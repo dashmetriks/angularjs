@@ -35,6 +35,20 @@ function ContactController($scope,$window,$http) {
     });
  }
         
+ $scope.joinGame = function() {
+    $http({
+      method: 'POST',
+      url: 'http://127.0.0.1:7000/mygames/',
+      data: '{"game":"3"}', 
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+      console.log( data );
+      //$window.sessionStorage.setItem('token', data.access_token);
+      //$scope.initFirst();
+      //$scope.newcontact = {};
+    });
+ }
+        
  $scope.saveContact = function() {
     var dataObj = { description : $scope.newcontact.name };	
     $http.post('http://127.0.0.1:7000/games/', dataObj ).success(function(data) {
