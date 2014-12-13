@@ -13,32 +13,33 @@ var uid = 1;
 
 
 
-function ContactController($scope, $http) {
+function ContactController($scope,$window,$http) {
     
  $scope.initFirst=function(){
     $http.get('http://127.0.0.1:7000/games/').success(function(data) {
       $scope.contacts = data;
     });
  }
-   // $scope.contacts = [
-   //     {id:0, 'name': 'Viral', 'email':'hello@gmail.com', 'phone': '123-2343-44'}
-   // ];
-    
- $scope.saveContact = function() {
-    var dataObj = {
-				description : $scope.newcontact.name 
-		};	
-   // $http.post('http://127.0.0.1:7000/oauth2/access_token/', 'username=jameson&password=password&grant_type=password&client_id=jameson' ).success(function(data) {
+
+ $scope.login = function() {
     $http({
       method: 'POST',
       url: 'http://127.0.0.1:7000/oauth2/access_token/',
-      data: 'username=jameson&password=password&grant_type=password&client_id=jameson',
+      data: 'username=' + $scope.newcontact.username + '&password=password&grant_type=password&client_id=' + $scope.newcontact.username,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data) {
       console.log( data.access_token );
+      $window.sessionStorage.setItem('token', data.access_token);
       $scope.initFirst();
       $scope.newcontact = {};
-     // $scope.contacts = data;
+    });
+ }
+        
+ $scope.saveContact = function() {
+    var dataObj = { description : $scope.newcontact.name };	
+    $http.post('http://127.0.0.1:7000/games/', dataObj ).success(function(data) {
+      $scope.initFirst();
+      $scope.newcontact = {};
     });
  }
         
