@@ -1,7 +1,39 @@
 var uid = 1;
+var interceptor = function ($q, $location) {
+    return {
+        request: function (config) {
+            console.log(config);
+            return config;
+        },
+
+        response: function (result) {
+            console.log('Repos:');
+            result.data.splice(0, 10).forEach(function (repo) {
+                console.log(repo.name);
+            })
+            return result;
+        },
+
+        responseError: function (rejection) {
+            console.log('Failed with', rejection.status, 'status');
+            if (rejection.status == 403) {
+                $location.url('/login');
+            }
+
+            return $q.reject(rejection);
+        }
+    }
+};
+
+//angular.module('app', [])
+
+var phonecatAppx = angular.module('phonecatApp1', [])
+    .config(function ($httpProvider) {
+        $httpProvider.interceptors.push(interceptor);
+    });
 
 
-var phonecatAppx = angular.module('phonecatApp1', []);
+//var phonecatAppx = angular.module('phonecatApp1', []);
 
 //phonecatAppx.controller('PhoneListCtrl1', ['$scope', '$http', function($scope, $http) {
 //  $http.get('http://127.0.0.1:7000/games/').success(function(data) {
