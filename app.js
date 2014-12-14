@@ -1,7 +1,7 @@
 var uid = 1;
 
 
-//var phonecatAppx = angular.module('phonecatApp1', []);
+var phonecatAppx = angular.module('phonecatApp1', []);
 
 //phonecatAppx.controller('PhoneListCtrl1', ['$scope', '$http', function($scope, $http) {
 //  $http.get('http://127.0.0.1:7000/games/').success(function(data) {
@@ -13,7 +13,7 @@ var uid = 1;
 
 
 
-function ContactController($scope,$window,$http) {
+phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', function($scope, $http, $window) {
     
  $scope.initFirst=function(){
     $http.get('http://127.0.0.1:7000/games/').success(function(data) {
@@ -90,4 +90,5 @@ function ContactController($scope,$window,$http) {
             }
         }
     }
-}
+//}
+}]);
