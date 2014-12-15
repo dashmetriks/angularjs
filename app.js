@@ -26,7 +26,7 @@ var interceptor = function ($q, $location) {
 };
 
 //angular.module('app', [])
-// feature 1 change
+// feature 1a change
 
 var phonecatAppx = angular.module('phonecatApp1', [])
     .config(function ($httpProvider) {
