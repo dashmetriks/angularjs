@@ -26,6 +26,7 @@ var interceptor = function ($q, $location) {
 };
 
 //angular.module('app', [])
+// master change
 
 var phonecatAppx = angular.module('phonecatApp1', [])
     .config(function ($httpProvider) {
