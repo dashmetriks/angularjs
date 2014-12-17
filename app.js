@@ -8,9 +8,9 @@ var interceptor = function ($q, $location) {
 
         response: function (result) {
             console.log('Repos:');
-            result.data.splice(0, 10).forEach(function (repo) {
-                console.log(repo.name);
-            })
+        //    result.data.splice(0, 10).forEach(function (repo) {
+         //       console.log(repo.name);
+        //    })
             return result;
         },
 
@@ -58,7 +58,7 @@ phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', func
     $http({
       method: 'POST',
       url: 'http://127.0.0.1:7000/oauth2/access_token/',
-      data: 'username=' + $scope.newcontact.username + '&password=password&grant_type=password&client_id=' + $scope.newcontact.username,
+      data: 'username=' + $scope.newcontact.username + '&password=' + $scope.newcontact.password + '&grant_type=password&client_id=' + $scope.newcontact.username,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data) {
       console.log( data.access_token );
@@ -68,11 +68,11 @@ phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', func
     });
  }
         
- $scope.joinGame = function() {
+ $scope.joinGame = function(id) {
     $http({
       method: 'POST',
       url: 'http://127.0.0.1:7000/mygames/',
-      data: '{"game":"3"}', 
+      data: '{"game":"' + id  +  '"}', 
       headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
     }).success(function(data) {
       console.log( data );

@@ -47,6 +47,7 @@
     <td>{{ contact.description }}</td>
     <td>{{ contact.id }}</td>
     <td>
+     <input type="button" value="Join Game" ng-click="joinGame(contact.id)" class="btn btn-primary"/>
         <a  href="#" ng-click="edit(contact.id)">edit</a> |
         <a href="#" ng-click="delete(contact.id)">delete</a>
     </td>
