@@ -48,6 +48,18 @@ var phonecatAppx = angular.module('phonecatApp1', [])
 
 phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', function($scope, $http, $window) {
     
+ if($window.sessionStorage.getItem('token') == null) {
+      console.log('logged out');
+      console.log($window.sessionStorage.getItem('token'));
+    $scope.visible = true;
+ //   $scope.visible = !$scope.visible;
+ }else{
+      console.log('logged in');
+      console.log($window.sessionStorage.getItem('token'));
+    $scope.visible2 = true;
+  //  $scope.visible2 = !$scope.visible2;
+ }
+
  $scope.initFirst=function(){
     $http.get('http://127.0.0.1:7000/games/').success(function(data) {
       $scope.contacts = data;
@@ -62,12 +74,27 @@ phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', func
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data) {
       console.log( data.access_token );
+      
       $window.sessionStorage.setItem('token', data.access_token);
-      $scope.initFirst();
-      $scope.newcontact = {};
+      console.log($window.sessionStorage.getItem('token'));
+    //  $scope.initFirst();
+      
+      $scope.visible2 = true;
+      $scope.visible = !$scope.visible;
+      //$scope.newcontact = {};
     });
  }
         
+ $scope.logout = function(){
+    $http.get('http://127.0.0.1:7000/api-auth/logout/').success(function(data) {
+      //$scope.contacts = data;
+      $window.sessionStorage['token'] = null;
+      console.log($window.sessionStorage.getItem('token'));
+      $scope.visible = true;
+      $scope.visible2 = !$scope.visible2;
+    });
+ }
+
  $scope.joinGame = function(id) {
     $http({
       method: 'POST',

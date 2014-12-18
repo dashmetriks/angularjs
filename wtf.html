@@ -20,6 +20,7 @@
      <input type="button" value="Save" ng-click="saveContact()" class="btn btn-primary"/>
     </form>
 
+    <div ng-show="visible">
     <form class="well">
     <label>Name</label>
         <input type="text" name="username" ng-model="newcontact.username"/>
@@ -27,6 +28,13 @@
         <input type="text" name="password" ng-model="newcontact.password"/>
      <input type="button" value="Login" ng-click="login()" class="btn btn-primary"/>
     </form>
+    </div>
+   
+    <div ng-show="visible2">
+    <form class="well">
+     <input type="button" value="Logout" ng-click="logout()" class="btn btn-primary"/>
+    </form>
+    </div>
 
     <form class="well">
      <input type="button" value="Join Game" ng-click="joinGame()" class="btn btn-primary"/>
