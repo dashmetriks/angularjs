@@ -81,7 +81,7 @@ phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', func
       
       $scope.visible2 = true;
       $scope.visible = !$scope.visible;
-      //$scope.newcontact = {};
+      $scope.newcontact = {};
     });
  }
         
