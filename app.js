@@ -28,10 +28,23 @@ var interceptor = function ($q, $location) {
 //angular.module('app', [])
 // feature master change
 
-var phonecatAppx = angular.module('phonecatApp1', [])
+var phonecatAppx = angular.module('phonecatApp1', ['ngRoute'])
     .config(function ($httpProvider) {
         $httpProvider.interceptors.push(interceptor);
     });
+
+phonecatAppx.config(function ($routeProvider) {
+    $routeProvider
+      .when('/games', {
+        templateUrl: 'wtf.html',
+        controller: 'ContactController'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+
+//    $locationProvider.html5Mode(true);
+  });
 
 
 //var phonecatAppx = angular.module('phonecatApp1', []);
@@ -46,7 +59,7 @@ var phonecatAppx = angular.module('phonecatApp1', [])
 
 
 
-phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$location', function($scope, $http, $window, $location) {
     
  if($window.sessionStorage.getItem('token') == null) {
       console.log('logged out');
@@ -79,6 +92,7 @@ phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', func
       console.log($window.sessionStorage.getItem('token'));
     //  $scope.initFirst();
       
+      $location.path('/games');
       $scope.visible2 = true;
       $scope.visible = !$scope.visible;
       $scope.newcontact = {};
