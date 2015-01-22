@@ -39,8 +39,13 @@ phonecatAppx.config(function ($routeProvider) {
         templateUrl: 'wtf.html',
         controller: 'ContactController'
       })
-      .otherwise({
-        redirectTo: '/'
+      .when('/gw', {
+        templateUrl: 'gw.html',
+        controller: 'ContactController'
+      })
+      .when('/login', {
+          templateUrl: 'loginu.html',
+        controller: 'ContactController'
       });
 
 //    $locationProvider.html5Mode(true);
@@ -61,20 +66,26 @@ phonecatAppx.config(function ($routeProvider) {
 
 phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$location', function($scope, $http, $window, $location) {
     
- if($window.sessionStorage.getItem('token') == null) {
-      console.log('logged out');
-      console.log($window.sessionStorage.getItem('token'));
-    $scope.visible = true;
+// if($window.sessionStorage.getItem('token') == null) {
+//      console.log('logged out');
+  //    console.log($window.sessionStorage.getItem('token'));
+ //   $scope.visible = true;
  //   $scope.visible = !$scope.visible;
- }else{
-      console.log('logged in');
-      console.log($window.sessionStorage.getItem('token'));
-    $scope.visible2 = true;
+// }else{
+//      console.log('logged in');
+//      console.log($window.sessionStorage.getItem('token'));
+ //   $scope.visible2 = true;
   //  $scope.visible2 = !$scope.visible2;
- }
+// }
 
  $scope.initFirst=function(){
     $http.get('http://127.0.0.1:7000/games/').success(function(data) {
+      $scope.contacts = data;
+    });
+ }
+
+ $scope.gameweek=function(){
+    $http.get('http://localhost:7000/gameweek/7').success(function(data) {
       $scope.contacts = data;
     });
  }
