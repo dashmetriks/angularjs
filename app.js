@@ -39,7 +39,7 @@ phonecatAppx.config(function ($routeProvider) {
         templateUrl: 'wtf.html',
         controller: 'ContactController'
       })
-      .when('/gw', {
+      .when('/gw/:game_id', {
         templateUrl: 'gw.html',
         controller: 'ContactController'
       })
@@ -64,7 +64,19 @@ phonecatAppx.config(function ($routeProvider) {
 
 
 
-phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$location', function($scope, $http, $window, $location) {
+phonecatAppx.controller('MyCtrl',['$scope','$http',"$routeParams",
+        function($scope,$http,$routeParams) {
+             $http.get('http://localhost:7000/gameweek/' + $routeParams.game_id ).success(function(data) {
+             $scope.contacts = data;
+             $scope.game_id = $routeParams.game_id;
+          //   $http.get("/get/"+$routeParams.game_id).success(function(data) {
+            //     $scope.record = data;
+        });
+}]);
+
+
+phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$location', '$routeParams',
+function($scope, $http, $window, $location, $routeParams) {
     
 // if($window.sessionStorage.getItem('token') == null) {
 //      console.log('logged out');
@@ -79,14 +91,17 @@ phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$lo
 // }
 
  $scope.initFirst=function(){
-    $http.get('http://127.0.0.1:7000/games/').success(function(data) {
+    $http.get('http://127.0.0.1:7000/gameweek/').success(function(data) {
       $scope.contacts = data;
     });
  }
 
- $scope.gameweek=function(){
-    $http.get('http://localhost:7000/gameweek/7').success(function(data) {
-      $scope.contacts = data;
+ $scope.gameweek=function(id){
+             $http.get('http://localhost:7000/gameweek/' + $routeParams.game_id ).success(function(data) {
+             $scope.contacts = data;
+             $scope.game_id = $routeParams.game_id;
+   // $http.get('http://localhost:7000/gameweek/' + id ).success(function(data) {
+    //  $scope.contacts = data;
     });
  }
 
@@ -134,6 +149,20 @@ phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$lo
     });
  }
         
+ $scope.gameStatus = function(id,gstatus) {
+    $http({
+      method: 'POST',
+      url: 'http://127.0.0.1:7000/gameweek/',
+    //  data: '{"game_id":"' + id  +  '"gstatus":""' + gstatus '"}', 
+      data: '{"game_id":' + id  + ',"gstatus":"' + gstatus +  '"}', 
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+      console.log( data );
+      //$window.sessionStorage.setItem('token', data.access_token);
+      $scope.gameweek();
+      //$scope.newcontact = {};
+    });
+ }
  $scope.saveContact = function() {
     var dataObj = { description : $scope.newcontact.name };	
     $http.post('http://127.0.0.1:7000/games/', dataObj ).success(function(data) {

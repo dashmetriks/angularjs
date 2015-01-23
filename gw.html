@@ -10,6 +10,7 @@
 </head>
 <body>
 <div ng-controller="ContactController" ng-init="gameweek()">
+   <h2>gammmmme_id #{{game_id}}</h2>
     <form class="well">
     <label>Name</label>
         <input type="text" name="name" ng-model="newcontact.name"/>
@@ -39,7 +40,8 @@
     </div>
 
     <form class="well">
-     <input type="button" value="Join Game" ng-click="joinGame()" class="btn btn-primary"/>
+     <input type="button" value="Yes" ng-click="gameStatus(game_id,'Yes')" class="btn btn-primary"/>
+     <input type="button" value="No Game" ng-click="gameStatus(game_id,'No')" class="btn btn-primary"/>
     </form>
 
 <table class="table table-striped table-bordered">
@@ -64,7 +66,7 @@
 <tbody>
 <tr ng-repeat="contact in contacts">
     <td>{{ contact.users.username }}</td>
-    <td>{{ contact.description }}</td>
+    <td>{{ contact.gstatus }}</td>
     <td>{{ contact.id }}</td>
     <td>
      <input type="button" value="Join Game" ng-click="joinGame(contact.id)" class="btn btn-primary"/>
