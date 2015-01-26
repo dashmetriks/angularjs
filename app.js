@@ -41,7 +41,7 @@ phonecatAppx.config(function ($routeProvider) {
       })
       .when('/gw/:game_id', {
         templateUrl: 'gw.html',
-        controller: 'ContactController'
+        controller: 'GameUsers'
       })
       .when('/login', {
           templateUrl: 'loginu.html',
@@ -64,14 +64,65 @@ phonecatAppx.config(function ($routeProvider) {
 
 
 
-phonecatAppx.controller('MyCtrl',['$scope','$http',"$routeParams",
-        function($scope,$http,$routeParams) {
+phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
+        function($scope,$http,$window,$routeParams) {
+
+           $scope.gameweek=function(id){
              $http.get('http://localhost:7000/gameweek/' + $routeParams.game_id ).success(function(data) {
              $scope.contacts = data;
+             console.log( "woooooooot" );
              $scope.game_id = $routeParams.game_id;
-          //   $http.get("/get/"+$routeParams.game_id).success(function(data) {
-            //     $scope.record = data;
-        });
+             $scope.usergameweek();
+             });
+           }
+
+           $scope.gameStatus = function(id,gstatus) {
+             $http({
+               method: 'POST',
+               url: 'http://127.0.0.1:7000/gameweek/',
+               data: '{"game_id":' + id  + ',"gstatus":"' + gstatus +  '"}', 
+               headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+             }).success(function(data) {
+               console.log( data );
+               $scope.voted = true;
+               $scope.notvoted = false;
+               $scope.gameweek();
+             });
+           }
+
+ $scope.gameStatusUpdate=function(id,game_id,gstatus){
+    $http({
+      method: 'PUT',
+      url: 'http://localhost:7000/gamestatus/' + id ,
+      data: '{"id":' + id + ',"gstatus":"'+ gstatus + '","game_id":' + game_id + '}',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+            $scope.gameweek();
+    });
+ }
+
+
+ $scope.usergameweek=function(id){
+    $http({
+      method: 'GET',
+      url: 'http://localhost:7000/ugamestatus/' + $routeParams.game_id ,
+    //  data: '{"game":"' + id  +  '"}', 
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+             $scope.names = data;
+            // $scope.gusers = data;
+            console.log( 'woot' );
+            console.log( data.length );
+            if (data.length == 0 ){
+             $scope.notvoted = true;
+            }else{
+             $scope.voted = true;
+            }
+            console.log( 'dfa' );
+ 
+    });
+ }
+
 }]);
 
 
@@ -100,6 +151,7 @@ function($scope, $http, $window, $location, $routeParams) {
              $http.get('http://localhost:7000/gameweek/' + $routeParams.game_id ).success(function(data) {
              $scope.contacts = data;
              $scope.game_id = $routeParams.game_id;
+             $scope.usergameweek();
    // $http.get('http://localhost:7000/gameweek/' + id ).success(function(data) {
     //  $scope.contacts = data;
     });
@@ -163,6 +215,39 @@ function($scope, $http, $window, $location, $routeParams) {
       //$scope.newcontact = {};
     });
  }
+
+
+ $scope.usergameweek=function(id){
+    $http({
+      method: 'GET',
+      url: 'http://localhost:7000/ugamestatus/' + $routeParams.game_id ,
+    //  data: '{"game":"' + id  +  '"}', 
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+             $scope.names = data;
+            // $scope.gusers = data;
+            console.log( 'woot' );
+            console.log( data.id );
+            console.log( 'dfa' );
+    });
+ }
+
+ $scope.gameStatusUpdate=function(id,game_id,gstatus){
+    $http({
+      method: 'PUT',
+      url: 'http://localhost:7000/gamestatus/' + id ,
+      data: '{"id":' + id + ',"gstatus":"'+ gstatus + '","game_id":' + game_id + '}',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+             $scope.names = data;
+            // $scope.gusers = data;
+            console.log( 'woot' );
+            console.log( data );
+            console.log( 'dfa' );
+            $scope.usergameweek;
+    });
+ }
+
  $scope.saveContact = function() {
     var dataObj = { description : $scope.newcontact.name };	
     $http.post('http://127.0.0.1:7000/games/', dataObj ).success(function(data) {
