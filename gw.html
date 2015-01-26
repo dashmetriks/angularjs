@@ -10,11 +10,10 @@
 </head>
 <body>
 
-
 <div ng-controller="GameUsers" ng-init="gameweek()">
 
 <div ng-show="voted"> 
-<li ng-repeat="name in names">xxxx{{ name.id }}ooo
+<li ng-repeat="name in names">
 <form class="well">                                     
      <input type="button" value="Yes" ng-click="gameStatusUpdate(name.id, game_id,'Yes')" class="btn btn-primary"/>
      <input type="button" value="No Game" ng-click="gameStatusUpdate(name.id, game_id,'No')" class="btn btn-primary"/>
@@ -29,20 +28,11 @@
 </form>
 </div>
 
-<h2>{{names(results).length}}</h2>
-<h2>gammmmme_id #{{game_id}} game_id</h2>
-
 <table class="table table-striped table-bordered">
 <tr ng-repeat="contact in contacts">
     <td>{{ contact.users.username }}</td>
     <td>{{ contact.gstatus }}</td>
     <td>{{ contact.id }}</td>
-    <td>
-<form class="well">                                     
-     <input type="button" value="Yes" ng-click="gameStatusUpdate(contact.id, game_id,'Yes')" class="btn btn-primary"/>
-     <input type="button" value="No Game" ng-click="gameStatusUpdate(contact.id, game_id,'No')" class="btn btn-primary"/>
-     </td>
-</form>
 </tr>
 </body>
 </html>
