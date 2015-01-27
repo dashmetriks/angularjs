@@ -46,6 +46,10 @@ phonecatAppx.config(function ($routeProvider) {
       .when('/login', {
           templateUrl: 'loginu.html',
         controller: 'ContactController'
+      })
+      .when('/user/:user_id', {
+          templateUrl: 'user_edit.html',
+        controller: 'ContactController'
       });
 
 //    $locationProvider.html5Mode(true);
@@ -128,6 +132,17 @@ phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
 
 phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$location', '$routeParams',
 function($scope, $http, $window, $location, $routeParams) {
+
+ $scope.saveuser=function(){
+    $http({
+      method: 'PUT',
+      url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
+      data: '{"first_name":"' + $scope.useredit.first_name + '","last_name":"' + $scope.useredit.last_name  + '","email":"' + $scope.useredit.email + '","username":"' + $scope.useredit.username + '"}',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+            console.log( 'user changed' );
+    });
+ }
     
 // if($window.sessionStorage.getItem('token') == null) {
 //      console.log('logged out');
