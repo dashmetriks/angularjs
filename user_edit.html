@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="phonecatApp1">
+<head>
+<title>Hello World, AngularJS - ViralPatel.net</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-resource.min.js"></script>
+<script type="text/javascript" src="https://code.angularjs.org/1.3.5/angular-cookies.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+<div ng-controller="ContactController" ng-init="getuser()">
+
+<form class="well">
+    <div  class="form-group" >
+    <label>first name</label>
+        <input type="text" name="first_name" ng-model="userdata.first_name"/>
+    </div>
+    <div class="form-group" >
+    <label>Last name</label>
+        <input type="text" name="last_name" ng-model="userdata.last_name"/>
+    </div>
+
+    <div  class="form-group" >
+    <label>email</label>
+        <input type="text" name="email" ng-model="userdata.email"/>
+    </div>
+    <div class="form-group" >
+    <label>username</label>
+        <input type="text" name="username" ng-model="userdata.username"/>
+    </div>
+
+     <input type="button" value="Save" ng-click="saveuser()" class="btn btn-primary"/>
+    </form>
+
+</body>
+</html>

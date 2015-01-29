@@ -137,13 +137,26 @@ function($scope, $http, $window, $location, $routeParams) {
     $http({
       method: 'PUT',
       url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
-      data: '{"first_name":"' + $scope.useredit.first_name + '","last_name":"' + $scope.useredit.last_name  + '","email":"' + $scope.useredit.email + '","username":"' + $scope.useredit.username + '"}',
+      data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '"}',
       headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
     }).success(function(data) {
             console.log( 'user changed' );
+            $scope.getuser();
     });
  }
     
+ $scope.getuser=function(){
+    $http({
+      method: 'GET',
+      url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+            $scope.userdata = data;
+            console.log( 'get user' );
+            console.log( $window.sessionStorage.getItem('token') );
+    });
+ }
+
 // if($window.sessionStorage.getItem('token') == null) {
 //      console.log('logged out');
   //    console.log($window.sessionStorage.getItem('token'));
@@ -179,19 +192,33 @@ function($scope, $http, $window, $location, $routeParams) {
       data: 'username=' + $scope.newcontact.username + '&password=' + $scope.newcontact.password + '&grant_type=password&client_id=' + $scope.newcontact.username,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data) {
-      console.log( data.access_token );
+      //console.log( data );
+      //console.log( data.access_token );
       
       $window.sessionStorage.setItem('token', data.access_token);
-      console.log($window.sessionStorage.getItem('token'));
+    //  console.log($window.sessionStorage.getItem('token'));
     //  $scope.initFirst();
-      
-      $location.path('/games');
-      $scope.visible2 = true;
-      $scope.visible = !$scope.visible;
-      $scope.newcontact = {};
+        $scope.getCurrentUser(); 
+    //  $location.path('/games');
+     // $scope.visible2 = true;
+      //$scope.visible = !$scope.visible;
+      //$scope.newcontact = {};
     });
  }
         
+ $scope.getCurrentUser=function(){
+    $http({
+      method: 'GET',
+      url: 'http://localhost:7000/currentuser/' ,
+      headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    }).success(function(data) {
+            console.log( 'get current user' );
+            console.log( data );
+            console.log( data.id );
+            $location.path('/user/' + data.id);
+    });
+ }
+
  $scope.logout = function(){
     $http.get('http://127.0.0.1:7000/api-auth/logout/').success(function(data) {
       //$scope.contacts = data;
