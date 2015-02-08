@@ -13,12 +13,12 @@
 <div ng-controller="GameUsers" ng-init="gameweek()">
 
 <div ng-show="voted"> 
-<li ng-repeat="name in names">
 <form class="well">                                     
-     <input type="button" value="Yes" ng-click="gameStatusUpdate(name.id, game_id,'Yes')" class="btn btn-primary"/>
-     <input type="button" value="No Game" ng-click="gameStatusUpdate(name.id, game_id,'No')" class="btn btn-primary"/>
+     <input type="button" value="Yes" ng-click="gameStatusUpdate(gstatus_id, game_id,'Yes', email_choice)" class="btn btn-primary"/>
+     <input type="button" value="No Game" ng-click="gameStatusUpdate(gstatus_id, game_id,'No', email_choice)" class="btn btn-primary"/>
+     <label>email_choice</label>
+     <input type="checkbox" ng-model="email_choice" ng-click="gameStatusUpdate(gstatus_id, game_id,gstatus,email_choice_change)" ng-true-value="YES" ng-false-value="NO">
 </form>
- </li>
 </div>
 
 <div ng-show="notvoted"> 

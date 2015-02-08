@@ -30,6 +30,27 @@
         <input type="text" name="username" ng-model="userdata.username"/>
     </div>
 
+    <div class="form-group" >
+    <label>city</label>
+        <input type="text" name="city" ng-model="userdata.profile.city"/>
+    </div>
+
+    <div class="form-group" >
+    <label>email_choice</label>
+        <input type="text" name="email_choice" ng-model="userdata.profile.email_choice"/>
+    </div>
+
+    <div class="form-group" >
+    <label>email_choice</label>
+        <input type="checkbox" ng-model="userdata.profile.email_choice"
+                 ng-true-value="YES" ng-false-value="NO">
+    </div>
+
+    <div class="form-group" >
+    <label>phone_choice</label>
+        <input type="text" name="phone_choice" ng-model="userdata.profile.phone_choice"/>
+    </div>
+
      <input type="button" value="Save" ng-click="saveuser()" class="btn btn-primary"/>
     </form>
 

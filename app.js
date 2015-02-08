@@ -94,11 +94,11 @@ phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
              });
            }
 
- $scope.gameStatusUpdate=function(id,game_id,gstatus){
+ $scope.gameStatusUpdate=function(id,game_id,gstatus,email_choice){
     $http({
       method: 'PUT',
       url: 'http://localhost:7000/gamestatus/' + id ,
-      data: '{"id":' + id + ',"gstatus":"'+ gstatus + '","game_id":' + game_id + '}',
+      data: '{"id":' + id + ',"gstatus":"'+ gstatus + '","game_id":' + game_id + ',"email_choice":"' + email_choice + '"}',
       headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
     }).success(function(data) {
             $scope.gameweek();
@@ -110,17 +110,21 @@ phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
     $http({
       method: 'GET',
       url: 'http://localhost:7000/ugamestatus/' + $routeParams.game_id ,
-    //  data: '{"game":"' + id  +  '"}', 
       headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
     }).success(function(data) {
-             $scope.names = data;
-            // $scope.gusers = data;
-            console.log( 'woot' );
-            console.log( data.length );
+            $scope.names = data;
             if (data.length == 0 ){
              $scope.notvoted = true;
             }else{
              $scope.voted = true;
+             $scope.gstatus_id = data[0]['id'];
+             $scope.gstatus = data[0]['gstatus'];
+             $scope.email_choice = data[0]['email_choice'];
+                if (data[0]['email_choice'] == 'YES'){
+                   $scope.email_choice_change = 'NO';
+                }else{
+                   $scope.email_choice_change = 'YES';
+                }
             }
             console.log( 'dfa' );
  
@@ -137,7 +141,7 @@ function($scope, $http, $window, $location, $routeParams) {
     $http({
       method: 'PUT',
       url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
-      data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '"}',
+      data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '","profile":{"city":"' + $scope.userdata.profile.city + '","phone_choice":"' + $scope.userdata.profile.phone_choice + '","email_choice":"' + $scope.userdata.profile.email_choice + '"}}',
       headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
     }).success(function(data) {
             console.log( 'user changed' );
