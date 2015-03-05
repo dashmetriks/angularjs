@@ -381,7 +381,7 @@ myApp.directive('fileModel', ['$parse', function ($parse) {
     };
 }]);
 
-myApp.service('fileUpload', ['$http','$window', function ($http,$window) {
+myApp.service('fileUpload', [ '$http','$window', function ($http,$window) {
     this.uploadFileToUrl = function(file, uploadUrl){
         console.log ('auth token' + $window.sessionStorage.getItem('token'));
         var fd = new FormData();
@@ -391,13 +391,14 @@ myApp.service('fileUpload', ['$http','$window', function ($http,$window) {
             headers: {'Content-Type': undefined , 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token')}
         })
         .success(function(){
+//             $scope.getphotos();
         })
         .error(function(){
         });
     }
 }]);
 
-myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+myApp.controller('myCtrl', ['$scope', 'fileUpload','$http' , function($scope, fileUpload , $http){
     
     $scope.uploadFile = function(){
         var file = $scope.myFile;
@@ -405,6 +406,13 @@ myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload)
         var uploadUrl = "http://localhost:7000/imageUpload";
         fileUpload.uploadFileToUrl(file, uploadUrl);
     };
+
+   $scope.getphotos=function(){
+    $http.get('http://127.0.0.1:7000/api/photo/').success(function(data) {
+      $scope.photos = data;
+      console.log('fasfda' + data[0]['image']);
+    });
+ }
     
 }]);
 
