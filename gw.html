@@ -34,5 +34,21 @@
     <td>{{ contact.gstatus }}</td>
     <td>{{ contact.id }}</td>
 </tr>
+</table>
+
+<form class="well">
+    <div  class="form-group" >
+    <label>Comments</label>
+        <input type="text" name="content" ng-model="addcontent.content"/>
+    </div>
+    <div class="form-group" >
+     <input type="button" value="Add" ng-click="add_content()" class="btn btn-primary"/>
+    </form>
+
+<table class="table table-striped table-bordered">
+<tr ng-repeat="content in contents">
+    <td>{{ content.verbiage }}</td>
+</tr>
+</table>
 </body>
 </html>

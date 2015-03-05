@@ -78,6 +78,29 @@ phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
              $scope.game_id = $routeParams.game_id;
              $scope.usergameweek();
              });
+
+             $http.get('http://localhost:7000/content/' + $routeParams.game_id ).success(function(data) {
+             $scope.contents = data;
+            //console.log( "woooooooot" );
+             //$scope.game_id = $routeParams.game_id;
+             //$scope.usergameweek();
+             });
+
+
+           }
+
+           $scope.add_content = function(id,gstatus) {
+             $http({
+               method: 'POST',
+               url: 'http://127.0.0.1:7000/content/',
+               data: '{"game_id":' + $routeParams.game_id  + ',"verbiage":"' + $scope.addcontent.content +  '"}', 
+               headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+             }).success(function(data) {
+               console.log( data );
+               //$scope.voted = true;
+              // $scope.notvoted = false;
+               $scope.gameweek();
+             });
            }
 
            $scope.gameStatus = function(id,gstatus) {
@@ -337,3 +360,51 @@ function($scope, $http, $window, $location, $routeParams) {
     }
 //}
 }]);
+
+
+
+var myApp = angular.module('myApp', []);
+
+myApp.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
+myApp.service('fileUpload', ['$http','$window', function ($http,$window) {
+    this.uploadFileToUrl = function(file, uploadUrl){
+        console.log ('auth token' + $window.sessionStorage.getItem('token'));
+        var fd = new FormData();
+        fd.append('file', file);
+        $http.post(uploadUrl, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined , 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token')}
+        })
+        .success(function(){
+        })
+        .error(function(){
+        });
+    }
+}]);
+
+myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+    
+    $scope.uploadFile = function(){
+        var file = $scope.myFile;
+        console.log('file is ' + JSON.stringify(file));
+        var uploadUrl = "http://localhost:7000/imageUpload";
+        fileUpload.uploadFileToUrl(file, uploadUrl);
+    };
+    
+}]);
+
