@@ -382,9 +382,10 @@ myApp.directive('fileModel', ['$parse', function ($parse) {
 }]);
 
 myApp.service('fileUpload', [ '$http','$window', function ($http,$window) {
-    this.uploadFileToUrl = function(file, uploadUrl){
+    this.uploadFileToUrl = function(file, uploadUrl,verbiage){
         console.log ('auth token' + $window.sessionStorage.getItem('token'));
         var fd = new FormData();
+        fd.append('verbiage', verbiage);
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
             transformRequest: angular.identity,
@@ -402,9 +403,12 @@ myApp.controller('myCtrl', ['$scope', 'fileUpload','$http' , function($scope, fi
     
     $scope.uploadFile = function(){
         var file = $scope.myFile;
-        console.log('file is ' + JSON.stringify(file));
+        var verbiage = $scope.verbiage;
+        console.log('verbiage ' + verbiage);
+        console.log('file is ' + file);
         var uploadUrl = "http://localhost:7000/imageUpload";
-        fileUpload.uploadFileToUrl(file, uploadUrl);
+        fileUpload.uploadFileToUrl(file, uploadUrl,verbiage);
+        $scope.getphotos();
     };
 
    $scope.getphotos=function(){

@@ -2,14 +2,19 @@
 <html ng-app="myApp">
 <head>
 <title>wooooooot</title>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-resource.min.js"></script>
 <script type="text/javascript" src="https://code.angularjs.org/1.3.5/angular-cookies.js"></script>
 <script src="app.js"></script>
 </head>
 <body>
-<div ng-controller = "myCtrl">
+<div ng-controller = "myCtrl" ng-init="getphotos()">
     <input type="file" file-model="myFile"/>
+
+        <input type="text"  ng-model="verbiage"/>  
     <button ng-click="uploadFile()">upload me</button>
+
+<p ng-repeat="photo in photos">
+{{photo.verbiage}}
+<img src="http://localhost:7000/{{photo.image}}"></p> 
 </div>
