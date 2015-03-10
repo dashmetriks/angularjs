@@ -47,9 +47,13 @@ phonecatAppx.config(function ($routeProvider) {
           templateUrl: 'loginu.html',
         controller: 'ContactController'
       })
+      .when('/fupload', {
+          templateUrl: 'fupload.html',
+        controller: 'myCtrl'
+      })
       .when('/user/:user_id', {
           templateUrl: 'user_edit.html',
-        controller: 'ContactController'
+        controller: 'myCtrl'
       });
 
 //    $locationProvider.html5Mode(true);
@@ -363,9 +367,9 @@ function($scope, $http, $window, $location, $routeParams) {
 
 
 
-var myApp = angular.module('myApp', []);
+//var myApp = angular.module('myApp', []);
 
-myApp.directive('fileModel', ['$parse', function ($parse) {
+phonecatAppx.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -381,7 +385,7 @@ myApp.directive('fileModel', ['$parse', function ($parse) {
     };
 }]);
 
-myApp.service('fileUpload', [ '$http','$window', function ($http,$window) {
+phonecatAppx.service('fileUpload', [ '$http','$window', function ($http,$window) {
     this.uploadFileToUrl = function(file, uploadUrl,verbiage){
         console.log ('auth token' + $window.sessionStorage.getItem('token'));
         var fd = new FormData();
@@ -399,8 +403,45 @@ myApp.service('fileUpload', [ '$http','$window', function ($http,$window) {
     }
 }]);
 
-myApp.controller('myCtrl', ['$scope', 'fileUpload','$http' , function($scope, fileUpload , $http){
+phonecatAppx.controller('myCtrl', ['$scope', 'fileUpload','$http','$window','$routeParams' , 
+  function($scope, fileUpload , $http, $window, $routeParams){
     
+    $scope.saveuser=function(){
+       $http({
+         method: 'PUT',
+         url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
+         data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '","profile":{"city":"' + $scope.userdata.profile.city + '","phone_choice":"' + $scope.userdata.profile.phone_choice + '","email_choice":"' + $scope.userdata.profile.email_choice + '"}}',
+         headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+       }).success(function(data) {
+            console.log( 'user changed' );
+            $scope.getuser();
+       });
+    }
+    
+    $scope.getuser=function(){
+       $http({
+         method: 'GET',
+         url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
+         headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+       }).success(function(data) {
+            $scope.userdata = data;
+            console.log( 'get user' );
+            console.log( $window.sessionStorage.getItem('token') );
+       });
+    }
+
+    $scope.uploadProfilePic = function(){
+        var file = $scope.myFile;
+        var verbiage = "test";
+       // console.log('verbiage ' + verbiage);
+        console.log('file is ' + file);
+//        var uploadUrl = "http://localhost:7000/profilepic/" + $routeParams.user_id + '/';
+        var uploadUrl = "http://localhost:7000/profilepic/";
+     //  var uploadUrl = "http://localhost:7000/imageUpload";
+        fileUpload.uploadFileToUrl(file, uploadUrl, verbiage);
+        //$scope.getphotos();
+    };
+
     $scope.uploadFile = function(){
         var file = $scope.myFile;
         var verbiage = $scope.verbiage;
