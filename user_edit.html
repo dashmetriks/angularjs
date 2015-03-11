@@ -15,7 +15,10 @@
 <div  >
     <input type="file" file-model="myFile"/>
     <button ng-click="uploadProfilePic()">upload me</button>
+    <p><img HEIGHT=50 WIDTH=50 src="http://localhost:7000/{{userdata.profile.profile_pic}}"></p>
+
 </div>
+    
     <div  class="form-group" >
     <label>first name</label>
         <input type="text" name="first_name" ng-model="userdata.first_name"/>

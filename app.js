@@ -439,7 +439,7 @@ phonecatAppx.controller('myCtrl', ['$scope', 'fileUpload','$http','$window','$ro
         var uploadUrl = "http://localhost:7000/profilepic/";
      //  var uploadUrl = "http://localhost:7000/imageUpload";
         fileUpload.uploadFileToUrl(file, uploadUrl, verbiage);
-        //$scope.getphotos();
+        $scope.getuser();
     };
 
     $scope.uploadFile = function(){
