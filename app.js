@@ -43,6 +43,10 @@ phonecatAppx.config(function ($routeProvider) {
         templateUrl: 'gw.html',
         controller: 'GameUsers'
       })
+      .when('/register', {
+          templateUrl: 'register.html',
+        controller: 'ContactController'
+      })
       .when('/login', {
           templateUrl: 'loginu.html',
         controller: 'ContactController'
@@ -216,6 +220,18 @@ function($scope, $http, $window, $location, $routeParams) {
     });
  }
 
+ $scope.register = function() {
+    $http({
+      method: 'POST',
+      url: 'http://127.0.0.1:7000/register/',
+      data: 'username=' + $scope.newcontact.username + '&password=' + $scope.newcontact.password,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data) {
+     //   $window.sessionStorage.setItem('token', data.access_token);
+        $scope.login(); 
+    });
+ }
+
  $scope.login = function() {
     $http({
       method: 'POST',
@@ -223,17 +239,8 @@ function($scope, $http, $window, $location, $routeParams) {
       data: 'username=' + $scope.newcontact.username + '&password=' + $scope.newcontact.password + '&grant_type=password&client_id=' + $scope.newcontact.username,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data) {
-      //console.log( data );
-      //console.log( data.access_token );
-      
-      $window.sessionStorage.setItem('token', data.access_token);
-    //  console.log($window.sessionStorage.getItem('token'));
-    //  $scope.initFirst();
+        $window.sessionStorage.setItem('token', data.access_token);
         $scope.getCurrentUser(); 
-    //  $location.path('/games');
-     // $scope.visible2 = true;
-      //$scope.visible = !$scope.visible;
-      //$scope.newcontact = {};
     });
  }
         
