@@ -1,4 +1,3 @@
-var uid = 1;
 var interceptor = function ($q, $location) {
     return {
         request: function (config) {
@@ -44,7 +43,7 @@ phonecatAppx.config(function ($routeProvider) {
         controller: 'GameUsers'
       })
       .when('/register', {
-          templateUrl: 'register.html',
+          templateUrl: 'reg2.html',
         controller: 'ContactController'
       })
       .when('/login', {
@@ -74,6 +73,20 @@ phonecatAppx.config(function ($routeProvider) {
 //  $scope.orderProp = 'age';
 //}]);
 
+phonecatAppx.controller('mainController', function($scope) {
+
+                // function to submit the form after all validation has occurred                        
+                $scope.submitForm = function() {
+
+                        // check to make sure the form is completely valid
+                        if ($scope.userForm.$valid) {
+             console.log( "adfdasfdasdafd " + $scope.user.username );
+             console.log( "adfdasfdasdafd " + $scope.user.password );
+                                alert('our form is amazing');
+                        }
+                };
+
+        });
 
 
 phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
@@ -82,7 +95,6 @@ phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
            $scope.gameweek=function(id){
              $http.get('http://localhost:7000/gameweek/' + $routeParams.game_id ).success(function(data) {
              $scope.contacts = data;
-             console.log( "woooooooot" );
              $scope.game_id = $routeParams.game_id;
              $scope.usergameweek();
              });
@@ -168,6 +180,27 @@ phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
 phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$location', '$routeParams',
 function($scope, $http, $window, $location, $routeParams) {
 
+
+   $scope.submitForm = function() {
+
+                        // check to make sure the form is completely valid
+                        if ($scope.userForm.$valid) {
+             console.log( "adfdasfdasdafd " + $scope.user.username );
+             console.log( "adfdasfdasdafd " + $scope.user.password );
+    $http({
+      method: 'POST',
+      url: 'http://127.0.0.1:7000/register/',
+      data: 'username=' + $scope.user.username + '&password=' + $scope.user.password,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data) {
+     //   $window.sessionStorage.setItem('token', data.access_token);
+        $scope.login(); 
+    });
+    //                            alert('our form is amazing');
+                        }
+                };
+
+
  $scope.saveuser=function(){
     $http({
       method: 'PUT',
@@ -224,7 +257,7 @@ function($scope, $http, $window, $location, $routeParams) {
     $http({
       method: 'POST',
       url: 'http://127.0.0.1:7000/register/',
-      data: 'username=' + $scope.newcontact.username + '&password=' + $scope.newcontact.password,
+      data: 'username=' + $scope.user.username + '&password=' + $scope.user.password,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data) {
      //   $window.sessionStorage.setItem('token', data.access_token);
@@ -236,7 +269,7 @@ function($scope, $http, $window, $location, $routeParams) {
     $http({
       method: 'POST',
       url: 'http://127.0.0.1:7000/oauth2/access_token/',
-      data: 'username=' + $scope.newcontact.username + '&password=' + $scope.newcontact.password + '&grant_type=password&client_id=' + $scope.newcontact.username,
+      data: 'username=' + $scope.user.username + '&password=' + $scope.user.password + '&grant_type=password&client_id=' + $scope.user.username,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).success(function(data) {
         $window.sessionStorage.setItem('token', data.access_token);
