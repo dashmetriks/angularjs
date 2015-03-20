@@ -27,10 +27,10 @@ var interceptor = function ($q, $location) {
 //angular.module('app', [])
 // feature master change
 
-var phonecatAppx = angular.module('phonecatApp1', ['ngRoute'])
-    .config(function ($httpProvider) {
-        $httpProvider.interceptors.push(interceptor);
-    });
+var phonecatAppx = angular.module('phonecatApp1', ['ngRoute']);
+//    .config(function ($httpProvider) {
+ //       $httpProvider.interceptors.push(interceptor);
+//    });
 
 phonecatAppx.config(function ($routeProvider) {
     $routeProvider
