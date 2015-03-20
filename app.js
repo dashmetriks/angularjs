@@ -54,6 +54,10 @@ phonecatAppx.config(function ($routeProvider) {
           templateUrl: 'fupload.html',
         controller: 'myCtrl'
       })
+      .when('/username/:user_id', {
+          templateUrl: 'username.html',
+        controller: 'myCtrl'
+      })
       .when('/user/:user_id', {
           templateUrl: 'user_edit.html',
         controller: 'myCtrl'
@@ -73,20 +77,6 @@ phonecatAppx.config(function ($routeProvider) {
 //  $scope.orderProp = 'age';
 //}]);
 
-phonecatAppx.controller('mainController', function($scope) {
-
-                // function to submit the form after all validation has occurred                        
-                $scope.submitForm = function() {
-
-                        // check to make sure the form is completely valid
-                        if ($scope.userForm.$valid) {
-             console.log( "adfdasfdasdafd " + $scope.user.username );
-             console.log( "adfdasfdasdafd " + $scope.user.password );
-                                alert('our form is amazing');
-                        }
-                };
-
-        });
 
 
 phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
@@ -180,25 +170,19 @@ phonecatAppx.controller('GameUsers',['$scope','$http','$window', "$routeParams",
 phonecatAppx.controller('ContactController', ['$scope', '$http', '$window', '$location', '$routeParams',
 function($scope, $http, $window, $location, $routeParams) {
 
-
-   $scope.submitForm = function() {
-
-                        // check to make sure the form is completely valid
-                        if ($scope.userForm.$valid) {
-             console.log( "adfdasfdasdafd " + $scope.user.username );
-             console.log( "adfdasfdasdafd " + $scope.user.password );
-    $http({
-      method: 'POST',
-      url: 'http://127.0.0.1:7000/register/',
-      data: 'username=' + $scope.user.username + '&password=' + $scope.user.password,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function(data) {
-     //   $window.sessionStorage.setItem('token', data.access_token);
-        $scope.login(); 
-    });
-    //                            alert('our form is amazing');
-                        }
-                };
+        // Submit form for registration
+	$scope.submitForm = function() {
+        	if ($scope.userForm.$valid) {
+	    		$http({
+				method: 'POST',
+      				url: 'http://127.0.0.1:7000/register/',
+      				data: 'username=' + $scope.user.username + '&password=' + $scope.user.password,
+      				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    				}).success(function(data) {
+        				$scope.login(); 
+    				});
+		}
+	};
 
 
  $scope.saveuser=function(){
@@ -286,7 +270,7 @@ function($scope, $http, $window, $location, $routeParams) {
             console.log( 'get current user' );
             console.log( data );
             console.log( data.id );
-            $location.path('/user/' + data.id);
+            $location.path('/username/' + data.id);
     });
  }
 
@@ -446,6 +430,22 @@ phonecatAppx.service('fileUpload', [ '$http','$window', function ($http,$window)
 phonecatAppx.controller('myCtrl', ['$scope', 'fileUpload','$http','$window','$routeParams' , 
   function($scope, fileUpload , $http, $window, $routeParams){
     
+	$scope.submitUserNameForm = function() {
+        	if ($scope.userForm.$valid) {
+                        alert('our form is amazing');
+       			$http({
+         			method: 'PUT',
+         			url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
+         			data: '{"username":"' + $scope.userdata.username + '","profile":{"nickname":"' + $scope.user.nickname  + '"}}',
+         			headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+       			}).success(function(data) {
+            			console.log( 'user changed' );
+            			$scope.getuser();
+       			});
+     	
+		}
+	};
+
     $scope.saveuser=function(){
        $http({
          method: 'PUT',
