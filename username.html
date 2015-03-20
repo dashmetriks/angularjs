@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>CodePen - AngularJS Form Validation</title>
+
+  <link rel="stylesheet" href="css/normalize.css">
+
+  <link rel='stylesheet prefetch' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<!--  <div ng-app="phonecatApp1" ng-controller="ContactController"> -->
+  <div ng-controller="myCtrl" ng-init="getuser()">
+<div class="container">
+<div class="row">  
+
+<div class="col-sm-6">
+    <!-- =================================================================== -->
+    <!-- FORM ============================================================== -->
+    <!-- =================================================================== -->
+
+    <form name="userForm" ng-submit="submitUserNameForm()" novalidate>
+
+
+      <!-- USERNAME -->
+<div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && !userForm.username.$pristine }">
+    <label>Username</label>
+    <input type="text" name="username" class="form-control" ng-model="user.nickname" ng-minlength="3" ng-maxlength="8">
+    <p ng-show="userForm.username.$error.minlength" class="help-block">Username is too short.</p>
+    <p ng-show="userForm.username.$error.maxlength" class="help-block">Username is too long.</p>
+</div>
+
+
+        <button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Submit</button>
+
+    </form>
+  </div>
+
+</div>
+</div>
+</div>
+
+  <script src='http://code.angularjs.org/1.2.6/angular.js'></script>
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
