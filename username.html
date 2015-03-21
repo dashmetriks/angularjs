@@ -33,9 +33,10 @@
       <!-- USERNAME -->
 <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && !userForm.username.$pristine }">
     <label>Username</label>
-    <input type="text" name="username" class="form-control" ng-model="user.nickname" ng-minlength="3" ng-maxlength="8">
+    <input type="text" name="username" class="form-control" ng-model="user.nickname"   ensure-unique="username"  ng-minlength="3" ng-maxlength="8">
     <p ng-show="userForm.username.$error.minlength" class="help-block">Username is too short.</p>
     <p ng-show="userForm.username.$error.maxlength" class="help-block">Username is too long.</p>
+    <p ng-show="userForm.username.$error.unique" class="help-block">That username is taken, please try another.</p>
 </div>
 
 

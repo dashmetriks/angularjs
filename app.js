@@ -393,6 +393,35 @@ function($scope, $http, $window, $location, $routeParams) {
 
 //var myApp = angular.module('myApp', []);
 
+phonecatAppx.directive('ensureUnique', ['$http', function($http) {
+return {
+    require: 'ngModel',
+    link: function(scope, ele, attrs, c) {  if (scope.registered) {return true};
+        scope.$watch(attrs.ngModel, function() {
+            $http({
+                method: 'GET',
+                url: 'http://localhost:7000/nicknamecheck/' + ele.val(),
+               // params: {
+                //    UserNameToVerify: ele.val(),
+                 //   BuddyApplicationName:'xxx',
+                  //  BuddyApplicationPassword:'yyy'
+             //   }
+            }).success(function(data, status, headers, cfg) {
+                    //c.$setValidity('uniqueS', (data==='UserNameAvailble'));
+                    c.$setValidity('unique', false);
+                    console.log( "success" );
+                    console.log( c );
+                }).error(function(data, status, headers, cfg) {
+                    c.$setValidity('unique', true);
+                    console.log( "errro" );
+                    console.log( c );
+                });
+           });
+        }
+    }
+}]);
+
+
 phonecatAppx.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
