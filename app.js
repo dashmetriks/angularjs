@@ -46,6 +46,10 @@ phonecatAppx.config(function ($routeProvider) {
           templateUrl: 'reg2.html',
         controller: 'ContactController'
       })
+      .when('/reset', {
+          templateUrl: 'passwordreset.html',
+        controller: 'ContactController'
+      })
       .when('/login', {
           templateUrl: 'loginu.html',
         controller: 'ContactController'
@@ -53,6 +57,10 @@ phonecatAppx.config(function ($routeProvider) {
       .when('/fupload', {
           templateUrl: 'fupload.html',
         controller: 'myCtrl'
+      })
+      .when('/passwordreset/:user_id/:token', {
+          templateUrl: 'passreset.html',
+        controller: 'ContactController'
       })
       .when('/username/:user_id', {
           templateUrl: 'username.html',
@@ -180,6 +188,35 @@ function($scope, $http, $window, $location, $routeParams) {
       				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     				}).success(function(data) {
         				$scope.login(); 
+    				});
+		}
+	};
+
+	$scope.ChangePassword = function() {
+        	if ($scope.userForm.$valid) {
+	    		$http({
+				method: 'PUT',
+      				url: 'http://localhost:7000/password-reset/confirm/' + $routeParams.user_id + '/' + $routeParams.token + '/',
+      				//data: 'new_password=' + $scope.user.password,
+      				data: '{"new_password":"' + $scope.user.password + '"}',
+      				headers: {'Content-Type': 'application/json'}
+    				}).success(function(data) {
+                                	console.log('password has been reset');
+        				//$scope.login(); 
+    				});
+		}
+	};
+
+	$scope.submitPRForm = function() {
+        	if ($scope.userForm.$valid) {
+	    		$http({
+				method: 'GET',
+      				url: 'http://127.0.0.1:7000/resetpassword/' + $scope.user.username ,
+      //				data: 'username=' + $scope.user.username + '&password=' + $scope.user.password,
+      				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    				}).success(function(data) {
+                                	console.log('password reset');
+        		//		$scope.login(); 
     				});
 		}
 	};
