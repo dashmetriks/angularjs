@@ -51,7 +51,7 @@ phonecatAppx.config(function ($routeProvider) {
         controller: 'ContactController'
       })
       .when('/login', {
-          templateUrl: 'loginu.html',
+          templateUrl: 'loginb.html',
         controller: 'ContactController'
       })
       .when('/fupload', {
