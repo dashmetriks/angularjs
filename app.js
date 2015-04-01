@@ -226,7 +226,7 @@ function($scope, $http, $window, $location, $routeParams) {
     $http({
       method: 'PUT',
       url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
-      data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '","profile":{"city":"' + $scope.userdata.profile.city + '","phone_choice":"' + $scope.userdata.profile.phone_choice + '","email_choice":"' + $scope.userdata.profile.email_choice + '"}}',
+      data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '","profile":{"city":"' + $scope.userdata.profile.city + '","phone_choice":"' + $scope.userdata.profile.phone_choice + '","email_choice":"' + $scope.userdata.profile.email_choice +  '","nickname":"' + $scope.userdata.profile.nickname + '"}}',
       headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
     }).success(function(data) {
             console.log( 'user changed' );
@@ -435,6 +435,12 @@ return {
     require: 'ngModel',
     link: function(scope, ele, attrs, c) {  if (scope.registered) {return true};
         scope.$watch(attrs.ngModel, function() {
+        if (scope.saved_nickname){ 
+        	if (scope.saved_nickname == scope.userdata.profile.nickname) {
+           		console.log('sweeeet nickname');
+            	return true;
+        	} 
+        };
             $http({
                 method: 'GET',
                 url: 'http://localhost:7000/nicknamecheck/' + ele.val(),
@@ -461,8 +467,17 @@ return {
 phonecatAppx.directive('ensureUniqueEmail', ['$http', function($http) {
 return {
     require: 'ngModel',
-    link: function(scope, ele, attrs, c) {  if (scope.registered) {return true};
+    link: function(scope, ele, attrs, c) {  
+        if (scope.registered) {return true};
         scope.$watch(attrs.ngModel, function() {
+        // if on user edit page
+        if (scope.saved_username){ 
+        	if (scope.saved_username == scope.userdata.username) {
+           		console.log('sweeeet');
+            	return true;
+        	} 
+        };
+        
             $http({
                 method: 'GET',
                 url: 'http://localhost:7000/emailcheck/' + ele.val(),
@@ -475,7 +490,7 @@ return {
                     //c.$setValidity('uniqueS', (data==='UserNameAvailble'));
                     c.$setValidity('unique', false);
                     console.log( "success" );
-                    console.log( c );
+                  //  console.log( scope.userdata.username );
                 }).error(function(data, status, headers, cfg) {
                     c.$setValidity('unique', true);
                     console.log( "errro" );
@@ -539,11 +554,25 @@ phonecatAppx.controller('myCtrl', ['$scope', 'fileUpload','$http','$window','$ro
 		}
 	};
 
+	$scope.submitUserChange = function() {
+        	if ($scope.userForm.$valid) {
+    			$http({
+      			method: 'PUT',
+      			url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
+      			data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '","profile":{"city":"' + $scope.userdata.profile.city + '","phone_choice":"' + $scope.userdata.profile.phone_choice + '","email_choice":"' + $scope.userdata.profile.email_choice +  '","nickname":"' + $scope.userdata.profile.nickname + '"}}',
+      			headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
+    			}).success(function(data) {
+            			console.log( 'user changed' );
+            			$scope.getuser();
+    			});
+		}
+	};
+
     $scope.saveuser=function(){
        $http({
          method: 'PUT',
          url: 'http://localhost:7000/user/' + $routeParams.user_id + '/',
-         data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '","profile":{"city":"' + $scope.userdata.profile.city + '","phone_choice":"' + $scope.userdata.profile.phone_choice + '","email_choice":"' + $scope.userdata.profile.email_choice + '"}}',
+         data: '{"first_name":"' + $scope.userdata.first_name + '","last_name":"' + $scope.userdata.last_name  + '","email":"' + $scope.userdata.email + '","username":"' + $scope.userdata.username + '","profile":{"city":"' + $scope.userdata.profile.city + '","phone_choice":"' + $scope.userdata.profile.phone_choice + '","email_choice":"' + $scope.userdata.profile.email_choice + '","nickname":"' + $scope.userdata.profile.nickname +'"}}',
          headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
        }).success(function(data) {
             console.log( 'user changed' );
@@ -558,7 +587,11 @@ phonecatAppx.controller('myCtrl', ['$scope', 'fileUpload','$http','$window','$ro
          headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + $window.sessionStorage.getItem('token') }
        }).success(function(data) {
             $scope.userdata = data;
-            console.log( 'get user' );
+            console.log( 'get user7' );
+            console.log( data.profile.nickname);
+            $scope.saved_username = data.username;
+            $scope.saved_nickname = data.profile.nickname;
+            
             console.log( $window.sessionStorage.getItem('token') );
        });
     }
