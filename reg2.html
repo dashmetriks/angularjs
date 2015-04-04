@@ -17,7 +17,7 @@
 
 <body>
 
-  <div ng-app="phonecatApp1" ng-controller="ContactController">
+  <div ng-app="phonecatApp1" ng-controller="myCtrl">
 <div class="container">
 <div class="row">  
 
@@ -44,7 +44,7 @@
             <label>Email</label>
             <input type="email" name="email" class="form-control" ng-model="user.username" ensure-unique-email="user.username" required>
             <p ng-show="userForm.email.$invalid && !userForm.email.$error.unique && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
-            <p ng-show="userForm.email.$error.unique" class="help-block">That username is taken, please try another.</p>
+            <p ng-show="userForm.email.$error.unique" class="help-block">That email is already registed, please <a href="#/login">login</a>.</p>
         </div>
 
 <div class="form-group" ng-class="{ 'has-error' : userForm.password.$invalid && !userForm.password.$pristine }">
@@ -55,7 +55,7 @@
 </div> 
 
         <button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Submit</button>
-
+        <p  class="help-block">Already registered? Login <a href="#/login">here</a></p>
     </form>
   </div>
 

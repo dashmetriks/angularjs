@@ -7,45 +7,61 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-resource.min.js"></script>
 <script type="text/javascript" src="https://code.angularjs.org/1.3.5/angular-cookies.js"></script>
 <script src="app.js"></script>
+<link rel="stylesheet" href="css/normalize.css">
+
+  <link rel='stylesheet prefetch' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'>
+
+    <link rel="stylesheet" href="css/style.css">
+
+
 </head>
 <body>
 <div ng-controller="myCtrl" ng-init="getuser()">
+<div class="container">
+<div class="row">
 
-<form class="well">
+<div class="col-sm-6">
+
+<form name="userForm" ng-submit="submitUserChange()" novalidate>
+
 <div  >
-    <input type="file" file-model="myFile"/>
+    <input type="file" class="form-control" file-model="myFile"/>
     <button ng-click="uploadProfilePic()">upload me</button>
     <p><img HEIGHT=50 WIDTH=50 src="http://localhost:7000/{{userdata.profile.profile_pic}}"></p>
 
 </div>
     
     <div  class="form-group" >
-    <label>first name</label>
-        <input type="text" name="first_name" ng-model="userdata.first_name" ng-init="userdata.first_name='fasdfsak'"/>
+    <label>First Name</label>
+        <input type="text" name="first_name"  class="form-control" ng-model="userdata.first_name" ng-init="userdata.first_name='fasdfsak'"/>
     </div>
     <div class="form-group" >
-    <label>Last name</label>
-        <input type="text" name="last_name" ng-model="userdata.last_name"/>
+    <label>Last Name</label>
+        <input type="text" name="last_name"   class="form-control" ng-model="userdata.last_name"/>
     </div>
 
-    <div  class="form-group" >
-    <label>email</label>
-        <input type="text" name="email" ng-model="userdata.email"/>
-    </div>
     <div class="form-group" >
-    <label>username</label>
-        <input type="text" name="username" ng-model="userdata.username"/>
+    <label>Email - Login ID</label>
+        <input type="email" name="email"   class="form-control" ng-model="userdata.username" ensure-unique-email="userdata.username" required>
+         <p ng-show="userForm.email.$error.unique" class="help-block">That email is already registed, please choose another.</p>
+    </div>
+
+
+    <div class="form-group" >
+    <label>Username</label>
+        <input type="text" name="username" class="form-control" ng-model="userdata.profile.nickname" ensure-unique="userdata.profile.nickname" required>
+        <p ng-show="userForm.username.$error.unique" class="help-block">That username is taken, please try another.</p>
     </div>
 
     <div class="form-group" >
     <label>city</label>
-        <input type="text" name="city" ng-model="userdata.profile.city"/>
+        <input type="text" name="city"   class="form-control" ng-model="userdata.profile.city" required>
     </div>
 
-    <div class="form-group" >
+    <!--<div class="form-group" >
     <label>email_choice</label>
         <input type="text" name="email_choice" ng-model="userdata.profile.email_choice"/>
-    </div>
+    </div> -->
 
     <div class="form-group" >
     <label>email_choice</label>
@@ -58,7 +74,8 @@
         <input type="text" name="phone_choice" ng-model="userdata.profile.phone_choice"/>
     </div>
 
-     <input type="button" value="Save" ng-click="saveuser()" class="btn btn-primary"/>
+     <button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Save</button>
+
     </form>
 
 </body>
